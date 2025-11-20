@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  browser:
+    image: jlesage/firefox
+    container_name: sandbox-browser
+    ports:
+      - "5800:5800"        # Remote desktop for the browser UI
+    networks:
+      - sandbox-net
+    dns:
+      - 1.1.1.1
+      - 8.8.8.8
+
+  mitm:
+    image: mitmproxy/mitmproxy
+    container_name: sandbox-mitm
+    command: mitmweb --web-host 0.0.0.0
+    ports:
+      - "8080:8080"        # mitm proxy port
+      - "8081:8081"        # mitm web UI
+    networks:
+      - sandbox-net
+
+networks:
+  sandbox-net:
+    driver: bridge
